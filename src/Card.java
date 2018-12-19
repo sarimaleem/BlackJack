@@ -2,7 +2,7 @@ public class Card {
     int val;
     String suite;
     String face;
-    boolean aceVal;
+    boolean aceValHigh;
 
     public Card(String face, String suite) {
         this.suite = suite;
@@ -16,7 +16,7 @@ public class Card {
     public int getVal() {
 
         if (face.equals("A")) {
-            if (aceVal) {
+            if (aceValHigh) {
                 return 11;
             }
             return 1;
@@ -33,7 +33,7 @@ public class Card {
         return face;
     }
 
-    public void setAceVal(boolean b) {
-        aceVal = b;
+    public void setAceValHigh(boolean b) {
+        aceValHigh = b;
     }
 }
