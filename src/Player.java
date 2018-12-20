@@ -4,10 +4,17 @@ public class Player {
     String name;
     ArrayList<Card> cards;
     int coins;
+    boolean isHuman;
+
+    public Player() {
+        cards = new ArrayList<>();
+    }
     
     public Player(String name) {
         cards = new ArrayList<>();
         this.name = name;
+        isHuman = true;
+        setCoins(500);
     }
 
     public String getName() {
@@ -31,11 +38,13 @@ public class Player {
         }
 
         int finalTotal = total + aces;
-            for (int i = 0; i < aces; i++) {
+            for (int i = 0; i <= aces; i++) {
                 int temp = total;
 
                 temp += i * 11;
                 temp += (aces - i);
+
+                System.out.println(temp);
 
                 if (finalTotal > 21) continue;
                 if (finalTotal <= 21 && temp <= 21 && temp > finalTotal) {
@@ -43,7 +52,7 @@ public class Player {
                 }
             }
 
-
+        System.out.println();
         return finalTotal;
     }
 
@@ -63,4 +72,14 @@ public class Player {
     public int getCoins() {
         return coins;
     }
+
+    public int getHandValue() {
+        return calcHandValue();
+    }
+
+    public boolean isHuman() {
+        return isHuman;
+    }
+
+
 }
