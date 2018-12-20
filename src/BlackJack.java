@@ -1,6 +1,7 @@
 import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class BlackJack {
 
@@ -8,7 +9,7 @@ public class BlackJack {
     ArrayList<Player> players;
     int currentPlayerIndex;
     int betSum;
-    ArrayList<Boolean> stayList;
+    boolean[] stayList;
 
     public BlackJack() {
         deck = new Deck();
@@ -16,7 +17,18 @@ public class BlackJack {
         players = new ArrayList<>();
         players.add(new Player("Sarim"));
         players.add(new AI("terminator"));
+        stayList = new boolean[players.size()];
+
     }
+
+
+    public void startRound() {
+        for (Player player : players) {
+            player.addCardToHand(deck.removeTop());
+            player.addCardToHand(deck.removeTop());
+        }
+    }
+
 
 
     public Player getCurrentPlayer() {
@@ -42,35 +54,62 @@ public class BlackJack {
     }
 
     public void stay() {
-        stayList.set(currentPlayerIndex, true);
+        stayList[currentPlayerIndex] = true;
     }
 
     public boolean roundOver() {
-        for (Boolean b : stayList) {
-            if (b == false) {
-                return false;
+
+        //System.out.println(Arrays.toString(stayList));
+
+        for (int i = 0; i < stayList.length; i++) {
+            if (stayList[i] == false) {
+                if(!players.get(i).isBust())
+                    return false;
             }
         }
         return true;
     }
 
     public void resetHands() {
+
+
         deck = new Deck();
 
         if (draw(players.get(0), players.get(1))) {
             players.get(0).setCoins(players.get(0).getCoins() + betSum / 2);
             players.get(1).setCoins(players.get(1).getCoins() + betSum / 2);
+            betSum = 0;
+            System.out.println("no one wins :(");
+            players.get(0).resetHand();
+            players.get(1).resetHand();
+            return;
         }
 
-        if (!players.get(0).isBust() && players.get(0).getHandValue() > players.get(1).getHandValue()) {
-            players.get(0).setCoins(players.get(0).getCoins() + betSum);
+        if(!players.get(0).isBust()) {
+            if (players.get(1).isBust()) {
+                players.get(0).setCoins(players.get(0).getCoins() + betSum);
+                System.out.println(players.get(0).getName() + " won");
+                betSum = 0;
+                players.get(0).resetHand();
+                players.get(1).resetHand();
+                return;
+            } else if (players.get(0).getHandValue() > players.get(1).getHandValue()) {
+                players.get(0).setCoins(players.get(0).getCoins() + betSum);
+                System.out.println(players.get(0).getName() + " won");
+                betSum = 0;
+                players.get(0).resetHand();
+                players.get(1).resetHand();
+                return;
+            }
         }
 
+
+        players.get(1).setCoins(players.get(0).getCoins() + betSum);
+        System.out.println(players.get(1).getName() + " won");
         betSum = 0;
-
+        players.get(0).resetHand();
+        players.get(1).resetHand();
     }
-
-
 
     public void bet(int num) {
         for (Player player : players) {
@@ -89,4 +128,14 @@ public class BlackJack {
         }
         return false;
     }
+
+    public String toString() {
+        return players.toString();
+    }
+
+    public boolean getCurrentStaying() {
+        return stayList[currentPlayerIndex];
+    }
+
+
 }

@@ -44,15 +44,11 @@ public class Player {
                 temp += i * 11;
                 temp += (aces - i);
 
-                System.out.println(temp);
-
                 if (finalTotal > 21) continue;
                 if (finalTotal <= 21 && temp <= 21 && temp > finalTotal) {
                     finalTotal = temp;
                 }
             }
-
-        System.out.println();
         return finalTotal;
     }
 
@@ -80,6 +76,16 @@ public class Player {
     public boolean isHuman() {
         return isHuman;
     }
+
+    public String toString() {
+        return getName() + " "  + "hand value"  + getHandValue() + getCards().toString() + " coins" + getCoins();
+    }
+
+    public void resetHand() {
+        cards.clear();
+    }
+
+
 
 
 }

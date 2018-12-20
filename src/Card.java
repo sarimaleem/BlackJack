@@ -24,4 +24,11 @@ public class Card {
         return face;
     }
 
+    public String toString() {
+        return face + " of " + suite;
+    }
+
+
+
+
 }
